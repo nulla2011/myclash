@@ -1,6 +1,5 @@
 node_modules
-config
+resources
+out
 *.exe
 *.env
-clash*.yaml
-config.yaml

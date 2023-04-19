@@ -5,13 +5,17 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"path/filepath"
 )
 
 func ReadPac() string {
-	file, err := os.Open("../config/pac")
+	ex, err := os.Executable()
 	if err != nil {
-		fmt.Println("err", err)
-		os.Exit(1)
+		panic(err)
+	}
+	file, err := os.Open(filepath.Join(filepath.Dir(ex), "../resources/pac"))
+	if err != nil {
+		panic(err)
 	}
 	defer file.Close()
 	var buf [128]byte
@@ -29,10 +33,12 @@ func ReadPac() string {
 var pacFile = ReadPac()
 
 func pac(w http.ResponseWriter, req *http.Request) {
+	fmt.Println("pac is requested")
 	w.Header().Set("content-type", "application/x-ns-proxy-autoconfig")
 	fmt.Fprintf(w, pacFile)
 }
 func main() {
+	go http.ListenAndServe(":9080", http.FileServer(http.Dir("C:/code/yacd/public")))
 	http.HandleFunc("/pac", pac)
-	http.ListenAndServe(":9089", nil)
+	http.ListenAndServe(":9081", nil)
 }
