@@ -16,15 +16,16 @@ banned_domains = [
   'spankbang.com',
   'www.dcode.fr',
   'gstatic.com',
-  'dmhy.org',
   'gateway.discord.gg',
   'translate.googleapis.com',
   'nyaa.si',
   'yande.re',
+  'vercel.app',
+  'bangumi.moe',
 ];
 other_domains = ['pythontutor.com']; //更新中
 other_stream_domains = ['mxdcontent.net', 'mixdrop.bz']; //更新中
-openai_domains = ['openai.com'];
+openai_domains = ['openai.com', 'sentry.io'];
 test_domains = ['zh.moegirl.org.cn'];
 
 module.exports.parse = ({ content, name, url }, { yaml, axios, notify }) => {

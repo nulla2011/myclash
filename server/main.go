@@ -5,15 +5,17 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"path/filepath"
+	// "path/filepath"
 )
 
+const frontpath = "C:/code/yacd/public"
+
 func ReadPac() string {
-	ex, err := os.Executable()
-	if err != nil {
-		panic(err)
-	}
-	file, err := os.Open(filepath.Join(filepath.Dir(ex), "../resources/pac"))
+	// ex, err := os.Executable()
+	// if err != nil {
+	// 	panic(err)
+	// }
+	file, err := os.Open("C:/code/whitelist.pac/whitelist.pac")
 	if err != nil {
 		panic(err)
 	}
@@ -38,7 +40,7 @@ func pac(w http.ResponseWriter, req *http.Request) {
 	fmt.Fprintf(w, pacFile)
 }
 func main() {
-	go http.ListenAndServe(":9080", http.FileServer(http.Dir("C:/code/yacd/public")))
+	go http.ListenAndServe(":9080", http.FileServer(http.Dir(frontpath)))
 	http.HandleFunc("/pac", pac)
 	http.ListenAndServe(":9081", nil)
 }
