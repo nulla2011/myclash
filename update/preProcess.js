@@ -3,6 +3,7 @@ proxyAlias = {
   g: '🌐 国外流量',
   s: '🎬 国际流媒体',
   o: '🚥 其他流量',
+  rej: 'REJECT',
 };
 sc_domains = ['shinycolors.enza.fun'];
 spotify_stream_domains_kw = ['spotify-com.akamaized.net', 'audio-fa.scdn.co'];
@@ -22,14 +23,18 @@ banned_domains = [
   'yande.re',
   'vercel.app',
   'bangumi.moe',
+  'socialblade.com',
+  'kemono.party',
 ];
-other_domains = ['pythontutor.com']; //更新中
+direct_domains = ['jpopsuki.eu', 'daydream.dmhy.best', 'tracker.hdarea.club'];
+block_domains = ['update.scdn.co'];
+other_domains = ['pythontutor.com', 'jp1.mikeslab.dix.asia']; //更新中
 other_stream_domains = ['mxdcontent.net', 'mixdrop.bz']; //更新中
 openai_domains = ['openai.com', 'sentry.io'];
 test_domains = ['zh.moegirl.org.cn'];
 
 module.exports.parse = ({ content, name, url }, { yaml, axios, notify }) => {
-  let addRules = (domains, proxy = '🌐 国外流量', type = 'DOMAIN-SUFFIX') => {
+  const addRules = (domains, proxy = '🌐 国外流量', type = 'DOMAIN-SUFFIX') => {
     domains.map((domain) => content.rules.unshift(`${type.toUpperCase()},${domain},${proxy}`));
   };
   proxiesNameFilter = (...kws) => {
@@ -116,6 +121,8 @@ module.exports.parse = ({ content, name, url }, { yaml, axios, notify }) => {
   addRules(openai_domains, 'ChatGPT');
   addRules(not_stream_domains, '🚥 其他流量');
   addRules(['sharepoint.com'], proxyAlias['d']);
+  addRules(direct_domains, proxyAlias['d']);
+  addRules(block_domains, proxyAlias.rej);
   addRules(other_domains);
   // addRules(test_domains, "test（记得关 pac ！）");
   return content;

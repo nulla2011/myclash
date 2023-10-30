@@ -18,6 +18,8 @@ const main = async () => {
     .catch((e) => console.error(e))
     .then((response) => YAML.parse(response.data));
   let config = Object.assign({}, onlineConfig, localConfig, { hosts: parseHosts() });
+  config['rule-providers'].GlobalMedia.url =
+    'https://ghproxy.com/https://raw.githubusercontent.com/nulla2011/myclash/master/RuleSet/GlobalMedia.yaml';
   Object.assign(config['rule-providers'], myrule['mix-rule-providers']);
   config = parse({ content: config }, {});
   fs.writeFileSync(path.join(__dirname, '../out/config.yaml'), YAML.stringify(config), 'utf-8');
