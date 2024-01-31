@@ -9,7 +9,7 @@ sc_domains = ['shinycolors.enza.fun'];
 spotify_stream_domains_kw = ['spotify-com.akamaized.net', 'audio-fa.scdn.co'];
 youtube_stream_domains = ['googlevideo.com'];
 googledrive_content_domains_kw = ['docs.googleusercontent.com'];
-nico_stream_domains = ['dmc.nico'];
+nico_stream_domains = ['dmc.nico','delivery.domand.nicovideo.jp','asset.domand.nicovideo.jp'];
 not_stream_domains = ['dmm.com', 'www.amazon.com'];
 jp_only_domains = ['dmm.co.jp']; //更新中
 block_china_domains = ['ddnavi.com', 'wsapi.master.live', 'api.nimo.tv']; //更新中
@@ -25,12 +25,14 @@ banned_domains = [
   'bangumi.moe',
   'socialblade.com',
   'kemono.party',
+  'kemono.su',
+  'wrtn.ai',
 ];
 direct_domains = ['jpopsuki.eu', 'daydream.dmhy.best', 'tracker.hdarea.club'];
 block_domains = ['update.scdn.co'];
 other_domains = ['pythontutor.com', 'jp1.mikeslab.dix.asia']; //更新中
 other_stream_domains = ['mxdcontent.net', 'mixdrop.bz']; //更新中
-openai_domains = ['openai.com', 'sentry.io'];
+openai_domains = ['openai.com', 'sentry.io', 'oaistatic.com', 'oaiusercontent.com'];
 test_domains = ['zh.moegirl.org.cn'];
 
 module.exports.parse = ({ content, name, url }, { yaml, axios, notify }) => {

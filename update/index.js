@@ -18,6 +18,8 @@ const main = async () => {
     .catch((e) => console.error(e))
     .then((response) => YAML.parse(response.data));
   let config = Object.assign({}, onlineConfig, localConfig, { hosts: parseHosts() });
+  config['rule-providers'].Global.url =
+    'https://ghproxy.com/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Proxy/Proxy_Classical.yaml';
   config['rule-providers'].GlobalMedia.url =
     'https://ghproxy.com/https://raw.githubusercontent.com/nulla2011/myclash/master/RuleSet/GlobalMedia.yaml';
   Object.assign(config['rule-providers'], myrule['mix-rule-providers']);
