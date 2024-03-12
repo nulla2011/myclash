@@ -1,49 +1,91 @@
-proxyAlias = {
+const proxyAlias = {
   d: 'DIRECT',
   g: '🌐 国外流量',
   s: '🎬 国际流媒体',
   o: '🚥 其他流量',
   rej: 'REJECT',
 };
-sc_domains = ['shinycolors.enza.fun'];
-spotify_stream_domains_kw = ['spotify-com.akamaized.net', 'audio-fa.scdn.co'];
-youtube_stream_domains = ['googlevideo.com'];
-googledrive_content_domains_kw = ['docs.googleusercontent.com'];
-nico_stream_domains = ['dmc.nico','delivery.domand.nicovideo.jp','asset.domand.nicovideo.jp'];
-not_stream_domains = ['dmm.com', 'www.amazon.com'];
-jp_only_domains = ['dmm.co.jp']; //更新中
-block_china_domains = ['ddnavi.com', 'wsapi.master.live', 'api.nimo.tv']; //更新中
-banned_domains = [
-  'spankbang.com',
-  'www.dcode.fr',
-  'gstatic.com',
-  'gateway.discord.gg',
-  'translate.googleapis.com',
-  'nyaa.si',
-  'yande.re',
-  'vercel.app',
+const sc_domains = ['shinycolors.enza.fun'];
+const spotify_stream_domains_kw = ['spotify-com.akamaized.net', 'audio-fa.scdn.co'];
+const youtube_stream_domains = ['googlevideo.com'];
+const googledrive_content_domains_kw = ['docs.googleusercontent.com'];
+const nico_stream_domains = [
+  'dmc.nico',
+  'delivery.domand.nicovideo.jp',
+  'asset.domand.nicovideo.jp',
+];
+const not_stream_domains = ['dmm.com', 'www.amazon.com'];
+const jp_only_domains = ['dmm.co.jp']; //更新中
+const block_china_domains = ['ddnavi.com', 'wsapi.master.live', 'api.nimo.tv']; //更新中
+const banned_domains = [
+  // 'gstatic.com',
+  // 'gateway.discord.gg',
+  // 'translate.googleapis.com',
   'bangumi.moe',
-  'socialblade.com',
   'kemono.party',
-  'kemono.su',
+  // 'kemono.su',
   'wrtn.ai',
 ];
-direct_domains = ['jpopsuki.eu', 'daydream.dmhy.best', 'tracker.hdarea.club'];
-block_domains = ['update.scdn.co'];
-other_domains = ['pythontutor.com', 'jp1.mikeslab.dix.asia']; //更新中
-other_stream_domains = ['mxdcontent.net', 'mixdrop.bz']; //更新中
-openai_domains = ['openai.com', 'sentry.io', 'oaistatic.com', 'oaiusercontent.com'];
-test_domains = ['zh.moegirl.org.cn'];
+const direct_domains = ['jpopsuki.eu', 'daydream.dmhy.best', 'tracker.hdarea.club'];
+const block_domains = ['update.scdn.co'];
+const other_domains = ['pythontutor.com', 'jp1.mikeslab.dix.asia']; //更新中
+const other_stream_domains = ['mxdcontent.net', 'mixdrop.bz']; //更新中
+const openai_domains = ['openai.com', 'sentry.io', 'oaistatic.com', 'oaiusercontent.com'];
+const test_domains = ['zh.moegirl.org.cn'];
 
 module.exports.parse = ({ content, name, url }, { yaml, axios, notify }) => {
   const addRules = (domains, proxy = '🌐 国外流量', type = 'DOMAIN-SUFFIX') => {
     domains.map((domain) => content.rules.unshift(`${type.toUpperCase()},${domain},${proxy}`));
   };
-  proxiesNameFilter = (...kws) => {
+  const proxiesNameFilter = (...kws) => {
     return content.proxies
       .filter((proxy) => kws.every((kw) => proxy.name.includes(kw)))
       .map((p) => p.name);
   };
+  Object.assign(content['rule-providers'], {
+    nico: {
+      type: 'http',
+      behavior: 'classical',
+      path: './RuleSet/StreamingMedia/Video/niconico.yaml',
+      url: 'https://gcore.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Niconico/Niconico.yaml',
+      interval: 86400,
+    },
+    AbemaTV: {
+      type: 'http',
+      behavior: 'classical',
+      path: './RuleSet/StreamingMedia/Video/AbemaTV.yaml',
+      url: 'https://gcore.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/AbemaTV/AbemaTV.yaml',
+      interval: 86400,
+    },
+    Bahamut: {
+      type: 'http',
+      behavior: 'classical',
+      path: './RuleSet/StreamingMedia/Video/Bahamut.yaml',
+      url: 'https://gcore.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Bahamut/Bahamut.yaml',
+      interval: 86400,
+    },
+    Spotify: {
+      type: 'http',
+      behavior: 'classical',
+      path: './RuleSet/StreamingMedia/Music/Spotify.yaml',
+      url: 'https://gcore.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Spotify/Spotify.yaml',
+      interval: 86400,
+    },
+    YouTube: {
+      type: 'http',
+      behavior: 'classical',
+      path: './RuleSet/StreamingMedia/Video/YouTube.yaml',
+      url: 'https://gcore.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/YouTube/YouTube.yaml',
+      interval: 86400,
+    },
+    // "TelegramSG": {
+    //   "type": "http",
+    //   "behavior": "classical",
+    //   "path": "./RuleSet/Extra/Telegram/TelegramSG.yaml",
+    //   "url": "https://gcore.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/AbemaTV/AbemaTV.yaml",
+    //   "interval": 86400
+    // }
+  });
   // content['proxy-groups'].splice(9, 0, {
   //   'name': '.1 balance',
   //   'type': 'load-balance',
@@ -76,11 +118,11 @@ module.exports.parse = ({ content, name, url }, { yaml, axios, notify }) => {
     type: 'select',
     proxies: ['🌐 国外流量', '🎬 国际流媒体', ...proxiesNameFilter(''), '➡️ 直接连接'],
   });
-  content['proxy-groups'].splice(10, 0, {
-    name: 'Telegram',
-    type: 'select',
-    proxies: ['🌐 国外流量', ...proxiesNameFilter(''), '➡️ 直接连接'],
-  });
+  // content['proxy-groups'].splice(10, 0, {
+  //   name: 'Telegram',
+  //   type: 'select',
+  //   proxies: ['🌐 国外流量', ...proxiesNameFilter(''), '➡️ 直接连接'],
+  // });
   content['proxy-groups'].splice(11, 0, {
     name: 'jp_other',
     type: 'select',
@@ -101,7 +143,7 @@ module.exports.parse = ({ content, name, url }, { yaml, axios, notify }) => {
   content.rules.unshift('RULE-SET,Bahamut,Bahamut');
   content.rules.unshift('RULE-SET,Spotify,🌐 国外流量');
   content.rules.unshift('RULE-SET,YouTube,YouTube');
-  content.rules.unshift('RULE-SET,TelegramSG,Telegram'); //不准确？
+  // content.rules.unshift('RULE-SET,TelegramSG,Telegram'); //不准确？
   ////组间路由
   content['proxy-groups'].find((p) => p.name == '🚥 其他流量').proxies.splice(2, 0, '.1');
   content['proxy-groups'].find((p) => p.name == '🌐 国外流量').proxies.splice(2, 0);
@@ -128,4 +170,4 @@ module.exports.parse = ({ content, name, url }, { yaml, axios, notify }) => {
   addRules(other_domains);
   // addRules(test_domains, "test（记得关 pac ！）");
   return content;
-};
+}
